@@ -1,2 +1,2 @@
-# make-handbook
-Handbook about modern make usage
+# Modern Make handbook
+Handbook about modern Make usage
