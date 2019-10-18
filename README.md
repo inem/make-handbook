@@ -1,4 +1,4 @@
-![](https://makefile.site/assets/images/image10.svg?v21633835241751)
+![](https://imgur.com/OubxVn4.png)
 
 # Modern Make handbook
 Handbook about modern Make usage
