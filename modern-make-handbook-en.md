@@ -142,15 +142,14 @@ deploy: test
 
 This means that each time you run `make deploy`, `make test` is called first. And only if it succeeds, `deploy` will be executed.
 
-<!--
 <div style="page-break-after: always;"></div>
 ## 5. Aliases
 
-Семен добавил в Makefile команду для прогона миграций, а Вова все никак не может запомнить как она называется. Иногда он пишет `make dbmigrate`, иногда `make db_migrate`, иногда по привычке вообще `make db:migrate`.
+Alice added a new target to the `Makefile` to run database migrations, but Bob keeps forgetting its name. He tries `make dbmigrate`, `make db_migrate`, even `make db:migrate` that always used to work before.
 
-Увы, с последним ничего не поделать. Двоеточия в названиях комманд не поддерживаются. Зато можно смело нафигачить себе алиасов на остальные варианты! Чем Вова и занялся.
+Unfortunately the latter will not work, because `make` does not support colon signs in target names. However you can have aliases for the rest!
 
-Для этого не нужно копипастить нашу длинную команду несколько раз, достаточно записать вызов оригинала после двоеточия:
+To do this Bob does not have to copy the long command to each of these targets. All what he needs to do is to specify the name of the original target after a colon sign:
 
 ```make
 db-migrate:
@@ -160,8 +159,9 @@ db_migrate: db-migrate
 dbmigrate: db-migrate
 ```
 
-Придумать годное название для шортката сходу бывает непросто. В таких случая как раз можно насоздавать сразу несколько алиасов, и оставить тот который приживется со временем.
+Sometimes coming up with a handy name for a shortcut can be tricky. In such cases you can create multiple aliases and keep the most used one after a while.
 
+<!--
 <div style="page-break-after: always;"></div>
 ## 6. Multiline commands
 
