@@ -73,55 +73,54 @@ logs:
 
 You've got the idea. A good thing about it is that you don't have to do this all at once. Whenever you find yourself struggling to remember that long command just add it to the `Makefile`!
 
-<!--
 <div style="page-break-after: always;"></div>
 ## 2. Overcoming Make weirdness
 
-Вова добрался до тестов, радостно добавляет в Makefile строчку для прогона тестов:
+Bob finally made it to his tests and adds a new line to his `Makefile` to run them conveniently:
 
 ```make
 test:
 	MINITEST_REPORTER=SpecReporter bundle exec bin/rails test
 ```
 
-Запускает, и получает привет:
+But once he tries his new command, a weird thing happens:
 
 ```
 $: make test
 make: `test' is up to date.
 ```
 
-– "Эээ, похоже что-то с вашим Make не так" -  думает Владимир. 
+– "After all it looks like your magical `make` is not *that* magical" - he thinks.
+
+
+Let's get a few decades back. The original idea of `make` was to generate files, and back these days `make test` would mean that you want to generate a file (or a folder) with the name `test`.
+
+`make` is clever enough to check whether such file (or folder) already exists to avoid doing extra work. But this is not what Bob meant!
 
 
 
-Надо понимать что Make придумывался чтобы билдить всякое, и изначальная семантика команды `make test` заключается в том чтобы сгенерировать папку `test`.
-
-Соответственно, раз такая папка есть, то запускать ничего уже не надо! (*так думает Make, Вова то как раз с этим не согласен*).
-
-
-
-Переубедить Make довольно просто. Надо добавить в Makefile магическую строчку:
+To overcome this cleverness of `make` Bob needs to add one magical line into our `Makefile`:
 
 `.PHONY: test`
 
-Если таких команд несколько, то просто пишем их все через пробел:
+And if there are several such targets, it's enough to enumerate them one by one using space character:
 
 `.PHONY: app test log doc`
 
 
 
-Вторая вредность Make заключается в том что он отказывается работать, если, о боже мой, для отступа использованы пробелы, а не символ табуляции:
+Another surprise comes when you used spaces instead of tabs for indentation:
 
 ```
 $: make test
 Makefile:13: *** missing separator.  Stop.
 ```
 
-Ну такое, да. Если ваш редактор умеет понимать типы файлов, то скорее всего он уже сам догадался использовать табы. Если нет, придется его немного подконфигурить.
+This does not look right. If your text editor can recognize different file formats, it probably already figured out that it should use tabs. Otherwise, you'll need to tweak it a little.
 
-Теперь Вова знает чего опасаться и как этого избегать, так что можно ехать дальше.
+Now, when Bob went down this rabbit hole and learned all the tricks, he can move on.
 
+<!--
 <div style="page-break-after: always;"></div>
 ## 3. Running multiple commands at once
 
