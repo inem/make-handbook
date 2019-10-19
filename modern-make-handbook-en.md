@@ -120,18 +120,18 @@ This does not look right. If your text editor can recognize different file forma
 
 Now, when Bob went down this rabbit hole and learned all the tricks, he can move on.
 
-<!--
 <div style="page-break-after: always;"></div>
 ## 3. Running multiple commands at once
 
-Хотим прогнать тесты, и если все ок, то задеплоить? No problemos:
+What if we want to run the tests, and if they pass deploy our code? No problemos:
 
 `make test deploy`
 
-Да, команды можно составлять в длинные цепочки, и если какая-то из команд фэйлится, то остальные запущены не будут.
+You've guessed right, you can specify multiple targets when running `make` and all of them will be executed in provided order. If one of them fails, the rest is not be executed.
 
 
 
+<!--
 ## 4. Subcommands
 
 В какой-то момент в команде решили что негоже деплоить без запуска тестов и прогон тестов просто захардкодили внутрь команды деплой: 
