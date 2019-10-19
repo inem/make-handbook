@@ -131,18 +131,18 @@ You've guessed right, you can specify multiple targets when running `make` and a
 
 
 
-<!--
 ## 4. Subcommands
 
-В какой-то момент в команде решили что негоже деплоить без запуска тестов и прогон тестов просто захардкодили внутрь команды деплой: 
+At some point your team decides that tests should always be run before deploying. To make sure everyone does it, they hardcoded this inside of the `deploy` target:
 
 ```make
 deploy: test
 	ansible-playbook -i inventory/production --tags 'deploy' # ...
 ```
 
-Т.е. при использовании `make deploy` до деплоя дойдет дело только если пройдут тесты.
+This means that each time you run `make deploy`, `make test` is called first. And only if it succeeds, `deploy` will be executed.
 
+<!--
 <div style="page-break-after: always;"></div>
 ## 5. Aliases
 
