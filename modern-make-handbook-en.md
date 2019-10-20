@@ -218,11 +218,11 @@ db:
 
 Yay!
 
-<!--
+
 <div style="page-break-after: always;"></div>
 ## 8. Ignoring errors
 
-При деплое на staging разрабы тоже решили прогонять тесты:
+Bob's team decided to run tests befo deploing on staging as well:
 
 ```make
 staging-deploy: 
@@ -230,9 +230,9 @@ staging-deploy:
 	ansible-playbook -i inventory/staging --tags 'deploy' #...
 ```
 
-Правда быстро выяснилось, что иногда надо задеплоить, даже если тесты падают! 
+However soon it turned out, that sometimes you need to deploy there even if tests are failing!
 
-Чтобы не выпиливать тесты из сценария, но деплоить несмотря на их результат, можно использовать магический префикс "-":
+To keep running tests before, but still deploy even if they did not pass, you can use another magical prefix `-`:
 
 ```make
 staging-deploy: 
@@ -240,7 +240,7 @@ staging-deploy:
 	ansible-playbook -i inventory/staging --tags 'deploy' #...
 ```
 
-
+<!--
 ## 9. Running command only if another one fails
 
 А можно было поступить по другому.
