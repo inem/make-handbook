@@ -240,19 +240,20 @@ staging-deploy:
 	ansible-playbook -i inventory/staging --tags 'deploy' #...
 ```
 
-<!--
+
 ## 9. Running command only if another one fails
 
-А можно было поступить по другому.
+There is also another way of doing this.
 
 ```make
 staging-deploy: 
-	@make test || echo "Опять Вова поломал тесты!!"
+	@make test || echo "Bob did it again!!"
 	ansible-playbook -i inventory/staging --tags 'deploy' #...
 ```
 
-Это даже не фишка Make, это обычный Bash scripting. В результате программа будет каждый раз журить Вову если тесты упали, но и от деплоя отказываться не будет.
+This is not yet another fancy `make` feature, but just a regular `bash` scripting. In this case `make` will nag about Bob breaking the tests again, but still proceed with deploy.
 
+<!--
 <div style="page-break-after: always;"></div>
 ## 10. Passing arguments
 
