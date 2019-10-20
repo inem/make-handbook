@@ -253,30 +253,31 @@ staging-deploy:
 
 This is not yet another fancy `make` feature, but just a regular `bash` scripting. In this case `make` will nag about Bob breaking the tests again, but still proceed with deploy.
 
-<!--
+
 <div style="page-break-after: always;"></div>
 ## 10. Passing arguments
 
-Однажды Вове понадобилось стянуть дамп базы со стэйджинга на свой комп. Пришлось напрячь остатки пямяти и разродиться скриптом:
+One day when Bob needed to pull a database dump from staging to his local machine, he scratched his head and came up with a script:
 
 ```make
 staging-fetch-dump:
 	scp app@staging-server.dev:/path/to/app/db/dump.tgz ./
 ```
 
-Только вот неплохо бы его сделать чуть более полезным. Вдруг понадобится какой-то еще файл стягивать.
+A good start, but how about to make it more useful, so he could use it to download any file?
 
-По такому случаю можно передать название файла в качестве аргумента:
+In this case you can pass the file name as an argument:
 
 ```make
 staging-fetch:
 	scp app@staging-server.dev:/path/to/app/$(F)/ ./
 ```
 
-Вызов команды теперь будет выглядеть так:
+And the command looks like this:
 
 `make staging-fetch F=db/dump.tgz`
 
+<!--
 <div style="page-break-after: always;"></div>
 ## 11. Seamless arguments
 
