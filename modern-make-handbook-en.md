@@ -277,13 +277,13 @@ And the command looks like this:
 
 `make staging-fetch F=db/dump.tgz`
 
-<!--
+
 <div style="page-break-after: always;"></div>
 ## 11. Seamless arguments
 
-Однако в случае когда аргумент всего один, было бы классно избавиться от необходимости запоминать название этого самого аргумента и вызывать команду прямо так: `make staging-fetch db/dump.tgz`
+Much better, but can we avoid keeping the variable name in mind and pass it directly to the `make` as `make staging-fetch db/dump.tgz`?
 
-Этого можно добиться, но только с помочью черной магии. Надо добавить в Makefile вот такую конструкцию:
+This could be done with a bit of black magic. If you add into your `Makefile` the following statement:
 
 ```make
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
@@ -291,23 +291,24 @@ ARGS = $(filter-out $@,$(MAKECMDGOALS))
   @:
 ```
 
-Шорткат при таких раскладах выглядит вот так:
+Your shortcut will turn into something that looks like this:
 
 ```
 staging-fetch:
 	scp app@staging-server.dev:/path/to/app/$(ARGS)/ ./
 ```
 
-Но магия на то и черная, что у неё есть неприятный спецеффект – уже после того как все успешно выполнится, прилетает вот такое сообщение:
+But since this is a black magic, it has an annoying side-effect: after everything is done you'll get the following message:
 
 ```
 make: *** No rule to make target 'db/dump.tgz'.  Stop.
 ```
 
-Можете почитать [подробности того как это работает](https://stackoverflow.com/a/6273809/1334666), чуть ниже вроде даже показывают как победить проблему с ошибкой, но мне это победить не удалось.
+Here is a [post on StackOverflow](https://stackoverflow.com/a/6273809/1334666) that explains how it works and even contains a possible workaround. However, I did not manage to make it work for me.
 
-Короче говоря, Вова смирился, и решил что можно заплатить такую цену за такую фичу, ну а вам решать самим.
+Even with this message, Bob is quite happy with what he has achieved. But you can decide for yourself whether it works for you.
 
+<!--
 <div style="page-break-after: always;"></div>
 ## 12. Advanced scripting
 
