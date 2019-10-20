@@ -123,7 +123,7 @@ Now, when Bob went down this rabbit hole and learned all the tricks, he can move
 <div style="page-break-after: always;"></div>
 ## 3. Running multiple commands at once
 
-What if we want to run the tests, and if they pass deploy our code? No problemos:
+What if we want to run the tests, and if they pass deploy our code? No problemo:
 
 `make test deploy`
 
