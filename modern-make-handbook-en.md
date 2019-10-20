@@ -161,20 +161,19 @@ dbmigrate: db-migrate
 
 Sometimes coming up with a handy name for a shortcut can be tricky. In such cases you can create multiple aliases and keep the most used one after a while.
 
-<!--
 <div style="page-break-after: always;"></div>
 ## 6. Multiline commands
 
-Со временем Вове надоело набирать такую длинную команду, и он заменил ее на `make db` (не забыв добавить `db` в `PHONY:`)
+One day Bob decided to automate his workflow even further and replaced his long command with a shorter version `make db`, and also added `db` to `.PHONY:`.
 
-И все бы классно, но в какой-то момент разработчики на проекте договорились не коммитить в проект `db/schema.rb` (который авто-обновляется после прогона миграций), а это значит что каждый раз после прогона миграций приходилось выполнять команду `make schema-reset`:
+So far so good, but on the next day the team decided to move `db/schema.rb` outside of their revision control system. But this file is updated automatically, so they also had to start running `make schema-reset` every time they run a migration.
 
 ```make
 schema-reset:
 	git checkout HEAD -- db/schema.rb
 ```
 
-К счастью, никто не запрещает запускать несколько команд под одним шорткатом, и команды Make можно вызывать из Makefile:
+Luckily there is a way to run multiple targets in one command by calling `make` from within the `Makefile`:
 
 ```make
 db:
@@ -185,7 +184,7 @@ schema-reset:
 	git checkout HEAD -- db/schema.rb
 ```
 
-Единственный минус в том, что Make по умолчанию многословен, и печатает каждую команду прежде чем выполнить:
+The downside of this approach is that by default `make` is verbose and outputs each command before executing it:
 
 ```
 $: make db
@@ -195,8 +194,10 @@ make schema-reset
 git checkout HEAD -- db/schema.rb
 ```
 
-К счатью это легко забороть.
+The good news are that this is very easy to fix!
 
+
+<!--
 <div style="page-break-after: always;"></div>
 ## 7. Suppressing output
 
