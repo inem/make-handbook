@@ -308,13 +308,13 @@ Here is a [post on StackOverflow](https://stackoverflow.com/a/6273809/1334666) t
 
 Even with this message, Bob is quite happy with what he has achieved. But you can decide for yourself whether it works for you.
 
-<!--
+
 <div style="page-break-after: always;"></div>
 ## 12. Advanced scripting
 
-Внезапно админы запилили все так, что теперь на каждый фичебранч поднимается по отдельному стэйджингу.
+One day the devops team has announced that for now on each feature branch will be deployed to a separate staging server.
 
-И все бы классно, но теперь в наши крутые шорткаты для работы со стэйджингом придется добавлять по еще одной переменной - имени сервера:
+This would be great, but now we need to add yet another variable to our awesome `make` targets that works with staging. We need to specify somehow the name of a server we are working with:
 
 ```make
 ssh:
