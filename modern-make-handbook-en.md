@@ -197,20 +197,18 @@ git checkout HEAD -- db/schema.rb
 The good news are that this is very easy to fix!
 
 
-<!--
+
 <div style="page-break-after: always;"></div>
 ## 7. Suppressing output
 
-Все что нужно сделать чтобы Make не выводил саму команду, а просто её выполнял, это добавить перед ней символ "@".
-
-Например, так:
+To stop `make` from printing out commands before execution just prefix it with `@`, i.e.
 
 ```make
 hello:
-	@echo "Привет, Вова!"
+	@echo "Hi, Bob!"
 ```
 
-Соответственно лишний вывод "make schema-reset" прячем так:
+In case of our story with `make schema-reset` all we need to do is:
 
 ```make
 db:
@@ -218,8 +216,9 @@ db:
 	@make schema-reset
 ```
 
-Ура! 
+Yay!
 
+<!--
 <div style="page-break-after: always;"></div>
 ## 8. Ignoring errors
 
