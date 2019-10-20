@@ -17,7 +17,7 @@
 
 
 
-– What does the dog way when it's warning?
+– What does the dog say when it's warning?
 
 – Woof-woof!
 
@@ -222,7 +222,7 @@ Yay!
 <div style="page-break-after: always;"></div>
 ## 8. Ignoring errors
 
-Bob's team decided to run tests befo deploing on staging as well:
+Bob's team has decided to run tests before deploying to staging as well:
 
 ```make
 staging-deploy: 
