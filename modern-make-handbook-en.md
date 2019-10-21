@@ -54,7 +54,7 @@ Let’s move on.
 
 Often, things that supposed to be simple, like `rails server`,  overgrow with addtional debilitating details: `bundle exec bin/rails server -p 3001 RAILS_ENV=development`. 
 
-Luckily we already know what to do::
+Luckily we already know what to do:
 
 ```make
 server:
