@@ -321,7 +321,7 @@ Here is a [post on StackOverflow](https://stackoverflow.com/a/6273809/1334666) t
 <div style="page-break-after: always;"></div>
 ## 12. Advanced scripting
 
-Another day DevOps team announces that for now on each feature branch will be deployed to a separate staging server.
+Another day the DevOps team announces that from now on each feature branch will be deployed to a separate staging server.
 
 Sounds great, but now for all our staging-related shortcuts we have to specify additional variable – URL of the server:
 
