@@ -163,7 +163,7 @@ Sometimes it is hard to come up with handy name for a shortcut. In this case jus
 ## 6. Multiline commands
 
 After a while, the team decided to replace `make db-migrate` with just `make db`, which is impossible to forget.
-Of course, they added `db` to `.PHONY:`, because Rails projects have `db`directory as well.
+Of course, they added `db` to `.PHONY:`, because Rails projects have `db` directory as well.
 
 So far so good, but on the next day the team decides that they not going to commit `db/schema.rb` anymore, but delegate it to CI system. The problem is that Rails generates the new version of `schema.rb` every time you run migrations.
 
