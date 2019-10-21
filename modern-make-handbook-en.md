@@ -11,145 +11,143 @@
 <div style="page-break-after: always;"></div>
 ## 1. Making your library of shortcuts
 
-– What does the cat say when it's hungry?
+– What cats say when they’re hungry?
 
 – Meow!
 
 
 
-– What does the dog say when it's warning?
+– What dogs say when they smell danger?
 
 – Woof-woof!
 
 
 
-– And what does Bob say when he's about to deploy his project?
+– And what does Bob say when he’s deploying project?
 
-– `ansible-playbook -i inventory/production --tags "deploy" app-server.yml -vvv --become-user=app --extra-vars=extra.txt --vault-password-file="~/.ansible/vault.txt"`
+– `ansible-playbook -i inventory/production --tags “deploy” app-server.yml -vvv --become-user=app --extra-vars=extra.txt --vault-password-file="~/.ansible/vault.txt"`
 
 
-This is what we're about to change here.
+This is what we’re going to fix.
 
-Our way of changing is easy and simple, just like organizing your closet.
+It is not gonna be hard. It will be easy and pleasant process. Just like organizing a closet.
 
-We will open a `Makefile` and put your magical spell in there:
+Open `Makefile` and put your mega-command in there:
 
 ```make
 deploy:
-	ansible-playbook -i inventory/production --tags "deploy" app-server.yml -vvv --become-user=app --extra-vars=extra.txt --vault-password-file="~/.ansible/vault.txt"
+	ansible-playbook -i inventory/production --tags “deploy” app-server.yml -vvv --become-user=app --extra-vars=extra.txt --vault-password-file="~/.ansible/vault.txt"
 ```
 
 
+Next time Bob will have to say just `make deploy.
 
-Next time Bob only needs to say `make deploy` and the magic happens!
+Cool, huh?  It means that
 
-Pretty cool, huh? Now Bob:
-
-- does not have to spend another minute to remember the syntax
-- will never use a wrong flag while typing the deploy command
-- is not going to freak out next time, when Ansible decides to rename half of their flags
-
+- Bob saves time because he doesn't have to remember all the details of the deploy command
+- Bob will never make a mistake in the deploy command
+- Bob is not going to freak out, when Ansible renames half of their flags
 
 
-Let's do the same to the rest of our commands.
+Let’s move on.
 
-Почему-то то что изначально задумывалось простым, например `rails server`, часто обрастает дополнительными изнуряющими подробностями: `bundle exec bin/rails server -p 3001 RAILS_ENV=development`. 
 
-At some point you start adding details to your simple commands and your `rails server` turns into something like `bundle exec bin/rails server -p 3001 RAILS_ENV=development`.
+Often, things that supposed to be simple, like `rails server`,  owergrow with addtional debilitating details: `bundle exec bin/rails server -p 3001 RAILS_ENV=development`. 
 
-And we already know what can we do here:
+Luckily we already know what to do::
 
 ```make
 server:
 	bundle exec bin/rails server -p 3001 RAILS_ENV=development
 ```
 
-Moving on:
+and:
 
 ```make
 logs:
 	tail -f log/development.log
 ```
 
-You've got the idea. A good thing about it is that you don't have to do this all at once. Whenever you find yourself struggling to remember that long command just add it to the `Makefile`!
+Savor it: `make deploy`, `make server`, `make logs`
+
+Of course, Bob commits the Makefile to the repository, so that his colleagues can use the shortcuts too!
+
+
 
 <div style="page-break-after: always;"></div>
 ## 2. Overcoming Make weirdness
 
-Bob finally made it to his tests and adds a new line to his `Makefile` to run them conveniently:
+Inspired, Bob keeps cleaning up:
 
 ```make
 test:
 	MINITEST_REPORTER=SpecReporter bundle exec bin/rails test
 ```
 
-But once he tries his new command, a weird thing happens:
+Then some weirdness happens:
 
 ```
 $: make test
-make: `test' is up to date.
+make: `test’ is up to date.
 ```
 
-– "After all it looks like your magical `make` is not *that* magical" - he thinks.
+— "Looks like something is very wrong with your Make!” - he thinks.
 
+Original purpose of Make is to automate complex builds for C/C++ projects. So, the semantics of `make test` assumes that `test` directory should be generated as a result.
 
-Let's get a few decades back. The original idea of `make` was to generate files, and back these days `make test` would mean that you want to generate a file (or a folder) with the name `test`.
+If such directory exists, Make assumes there's no need to execute anything. This is exactly what happened, since every Rails project has `test` directory.
 
-`make` is clever enough to check whether such file (or folder) already exists to avoid doing extra work. But this is not what Bob meant!
-
-
-
-To overcome this cleverness of `make` Bob needs to add one magical line into our `Makefile`:
+To persuade Make, Bob has to add one magical rule to `Makefile`:
 
 `.PHONY: test`
 
-And if there are several such targets, it's enough to enumerate them one by one using space character:
+If there are multiple commands like this,  we can add them all:
 
 `.PHONY: app test log doc`
 
 
-
-Another surprise comes when you used spaces instead of tabs for indentation:
+Another surprise is that Make is very picky about indentation. It refuses to work if you use spaces:
 
 ```
 $: make test
-Makefile:13: *** missing separator.  Stop.
+Makefile:13: *** missing separator. Stop.
 ```
 
-This does not look right. If your text editor can recognize different file formats, it probably already figured out that it should use tabs. Otherwise, you'll need to tweak it a little.
+If your editor detects the file format correctly, you don't have to do anything. If not, then just configure it accordingly.
 
-Now, when Bob went down this rabbit hole and learned all the tricks, he can move on.
+
+Now Bob is now warned, he knows how to avoid common problems, so we can move on.
 
 <div style="page-break-after: always;"></div>
 ## 3. Running multiple commands at once
 
-What if we want to run the tests, and if they pass deploy our code? No problemo:
+What if we want to run the tests, and if they pass, then deploy our code? No problemo:
 
 `make test deploy`
 
-You've guessed right, you can specify multiple targets when running `make` and all of them will be executed in provided order. If one of them fails, the rest is not be executed.
-
+Yup, you can combine commands in long chains. If one fails, the rest of them going to be skipped.
 
 
 ## 4. Subcommands
 
-At some point your team decides that tests should always be run before deploying. To make sure everyone does it, they hardcoded this inside of the `deploy` target:
+At some point, Bob's team decides that tests execution should be a part of deployment process, so they just hardcoded `test` command into deploy instructions:
 
 ```make
 deploy: test
-	ansible-playbook -i inventory/production --tags 'deploy' # ...
+	ansible-playbook -i inventory/production --tags ‘deploy’ # ...
 ```
-
 This means that each time you run `make deploy`, `make test` is called first. And only if it succeeds, `deploy` will be executed.
 
 <div style="page-break-after: always;"></div>
 ## 5. Aliases
 
-Alice added a new target to the `Makefile` to run database migrations, but Bob keeps forgetting its name. He tries `make dbmigrate`, `make db_migrate`, even `make db:migrate` that always used to work before.
+Alice adds a new command to run migrations, but Bob keeps forgetting how it is called. He run `make dbmigrate`, `make db_migrate`, and even `make db:migrate`, but kept getting error: 
 
-Unfortunately the latter will not work, because `make` does not support colon signs in target names. However you can have aliases for the rest!
+```
+make: *** No rule to make target '*'.  Stop.
+```
 
-To do this Bob does not have to copy the long command to each of these targets. All what he needs to do is to specify the name of the original target after a colon sign:
+We can fix this problem with aliases! Unfortunately, the latter will not work, because `make` command names can't contain colons. But for the rest of the typos we can do it easily, even without copying and pasting:
 
 ```make
 db-migrate:
@@ -159,21 +157,25 @@ db_migrate: db-migrate
 dbmigrate: db-migrate
 ```
 
-Sometimes coming up with a handy name for a shortcut can be tricky. In such cases you can create multiple aliases and keep the most used one after a while.
+Sometimes it is hard to come up with handy name for a shortcut. In this case just create a bunch of aliases and keep the most used one after a while.
 
 <div style="page-break-after: always;"></div>
 ## 6. Multiline commands
 
-One day Bob decided to automate his workflow even further and replaced his long command with a shorter version `make db`, and also added `db` to `.PHONY:`.
+After a while, the team decided to replace `make db-migrate` with just `make db`, which is impossible to forget.
+Of course, they added `db` to `.PHONY:`, because Rails projects have `db`directory as well.
 
-So far so good, but on the next day the team decided to move `db/schema.rb` outside of their revision control system. But this file is updated automatically, so they also had to start running `make schema-reset` every time they run a migration.
+So far so good, but on the next day the team decides that they not going to commit `db/schema.rb` anymore, but delegate it to CI system. The problem is that Rails generates the new version of `schema.rb` every time you run migrations.
+
+Not a big problem actually:
 
 ```make
 schema-reset:
 	git checkout HEAD -- db/schema.rb
 ```
 
-Luckily there is a way to run multiple targets in one command by calling `make` from within the `Makefile`:
+
+Luckily, we can run multiple commands under one shortcut, and you can nest make shortcuts:
 
 ```make
 db:
@@ -184,31 +186,31 @@ schema-reset:
 	git checkout HEAD -- db/schema.rb
 ```
 
-The downside of this approach is that by default `make` is verbose and outputs each command before executing it:
+Make prints each command before executing it, so the aoutput is a bit verbose:
 
 ```
 $: make db
-bundle exec bin/rails db:migrate 
+bundle exec bin/rails db:migrate 
 # ...
 make schema-reset
 git checkout HEAD -- db/schema.rb
 ```
 
-The good news are that this is very easy to fix!
+The good news is that it is very easy to fix!
 
 
 
 <div style="page-break-after: always;"></div>
-## 7. Suppressing output
+## 7. Making Make less verbose
 
-To stop `make` from printing out commands before execution just prefix it with `@`, i.e.
+When you don't want a command to be printed, and just want Make to execute it, prepend it with `@`:
 
 ```make
 hello:
-	@echo "Hi, Bob!"
+	@echo “Hi, Bob!”
 ```
 
-In case of our story with `make schema-reset` all we need to do is:
+So, in our case:
 
 ```make
 db:
@@ -222,58 +224,65 @@ Yay!
 <div style="page-break-after: always;"></div>
 ## 8. Ignoring errors
 
-Bob's team has decided to run tests before deploying to staging as well:
+Bob’s team decides to run tests before deploying to staging as well:
 
 ```make
-staging-deploy: 
+staging-deploy: 
 	@make test
-	ansible-playbook -i inventory/staging --tags 'deploy' #...
+	ansible-playbook -i inventory/staging --tags ‘deploy’ #...
 ```
 
-However soon it turned out, that sometimes you need to deploy there even if tests are failing!
+However, sometimes you have to deploy to staging even if tests are failing.
 
-To keep running tests before, but still deploy even if they did not pass, you can use another magical prefix `-`:
+To keep tests running, but still deploy even if they do not pass, we add another magical prefix: `-`.
 
 ```make
-staging-deploy: 
+staging-deploy: 
 	-@make test
-	ansible-playbook -i inventory/staging --tags 'deploy' #...
+	ansible-playbook -i inventory/staging --tags ‘deploy’ #...
 ```
 
 
 ## 9. Running command only if another one fails
 
-There is also another way of doing this.
+There is one more way to achieve the same effect:
 
 ```make
-staging-deploy: 
-	@make test || echo "Bob did it again!!"
-	ansible-playbook -i inventory/staging --tags 'deploy' #...
+staging-deploy: 
+	@make test || echo “Looks like Bob broke tests again!!”
+	ansible-playbook -i inventory/staging --tags ‘deploy’ #...
 ```
 
-This is not yet another fancy `make` feature, but just a regular `bash` scripting. In this case `make` will nag about Bob breaking the tests again, but still proceed with deploy.
+It's even not a feature of Make - it's a regular shell scripting. It will condemn Bob for broken tests every time they fail, but will deploy the project anyway.
 
+If we don’t want lower Bob's self-esteem, we can do it like this:
+
+```make
+staging-deploy: 
+	@make test || true
+	ansible-playbook -i inventory/staging --tags ‘deploy’ #...
+```
 
 <div style="page-break-after: always;"></div>
 ## 10. Passing arguments
 
-One day when Bob needed to pull a database dump from staging to his local machine, he scratched his head and came up with a script:
+Bob had to download a database dump from the staging server to his local machine. He decides to add it as a shortcut:
 
 ```make
 staging-fetch-dump:
-	scp app@staging-server.dev:/path/to/app/db/dump.tgz ./
+	scp app@staging-server.dev:/path/to/app/db/dump.tgz ./
 ```
 
-A good start, but how about to make it more useful, so he could use it to download any file?
+A good start, but how about to make it more useful, so we could use it to download any file?
 
-In this case you can pass the file name as an argument:
+We can pass a filename as argument:
 
 ```make
 staging-fetch:
-	scp app@staging-server.dev:/path/to/app/$(F)/ ./
+	scp app@staging-server.dev:/path/to/app/$(F)/ ./
 ```
 
-And the command looks like this:
+And we call it like this:
 
 `make staging-fetch F=db/dump.tgz`
 
@@ -281,47 +290,47 @@ And the command looks like this:
 <div style="page-break-after: always;"></div>
 ## 11. Seamless arguments
 
-Much better, but can we avoid keeping the variable name in mind and pass it directly to the `make` as `make staging-fetch db/dump.tgz`?
+What if we could simplify the command by skipping the name of the argument, since we have only one here?
 
-This could be done with a bit of black magic. If you add into your `Makefile` the following statement:
+Could we just do `make staging-fetch db/dump.tgz`?
+
+The answer is yes! We can do it with a bit of black magic. We have to add the following statement into the `Makefile`:
 
 ```make
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 %:
-  @:
+	@:
 ```
 
 Your shortcut will turn into something that looks like this:
 
 ```
 staging-fetch:
-	scp app@staging-server.dev:/path/to/app/$(ARGS)/ ./
+	scp app@staging-server.dev:/path/to/app/$(ARGS)/ ./
 ```
 
-But since this is a black magic, it has an annoying side-effect: after everything is done you'll get the following message:
+We called it "balck magic" for a reason. This trick has one annoying side effect. After the script is executed, you get an error message like this:
 
 ```
-make: *** No rule to make target 'db/dump.tgz'.  Stop.
+make: *** No rule to make target ‘db/dump.tgz’. Stop.
 ```
 
-Here is a [post on StackOverflow](https://stackoverflow.com/a/6273809/1334666) that explains how it works and even contains a possible workaround. However, I did not manage to make it work for me.
-
-Even with this message, Bob is quite happy with what he has achieved. But you can decide for yourself whether it works for you.
+Here is a [post on StackOverflow](https://stackoverflow.com/a/6273809/1334666) that explains how it works and even contains a fix for this problem. Although, Bob couldn‘t make it work, but he decided that this is the price he is ready to pay.
 
 
 <div style="page-break-after: always;"></div>
 ## 12. Advanced scripting
 
-One day the devops team has announced that for now on each feature branch will be deployed to a separate staging server.
+Another day DevOps team announces that for now on each feature branch will be deployed to a separate staging server.
 
-This would be great, but now we need to add yet another variable to our awesome `make` targets that works with staging. We need to specify somehow the name of a server we are working with:
+Sounds great, but now for all our staging-related shortcuts we have to specify additional variable – URL of the server:
 
 ```make
 ssh:
-	ssh app@$(S)
+  ssh app@$(S)
 
 staging-fetch:
-	scp app@$(S):/path/to/app/$(F)/ ./
+  scp app@$(S):/path/to/app/$(F)/ ./
 ```
 
 ... [TO BE CONTINUED IN PRO VERSION](https://gum.co/makefile-ru): ...
