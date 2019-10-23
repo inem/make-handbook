@@ -30,7 +30,7 @@
 
 This is what we’re going to fix.
 
-It is not gonna be hard. It will be easy and pleasant process. Just like organizing a closet.
+It is not gonna be hard. It will be an easy and pleasant process. Just like organizing a closet.
 
 Open `Makefile` and put your mega-command in there:
 
@@ -46,13 +46,13 @@ Cool, huh?  It means that
 
 - Bob saves time because he doesn't have to remember all the details of the deploy command
 - Bob will never make a mistake in the deploy command
-- Bob is not going to freak out, when Ansible renames half of their flags
+- Bob is not going to freak out when Ansible renames half of their flags
 
 
 Let’s move on.
 
 
-Often, things that supposed to be simple, like `rails server`,  overgrow with addtional debilitating details: `bundle exec bin/rails server -p 3001 RAILS_ENV=development`. 
+Often, things that supposed to be simple, like `rails server`,  overgrow with additional debilitating details: `bundle exec bin/rails server -p 3001 RAILS_ENV=development`. 
 
 Luckily we already know what to do:
 
@@ -93,9 +93,9 @@ make: `test’ is up to date.
 
 — "Looks like something is very wrong with your Make!” - he thinks.
 
-Original purpose of Make is to automate complex builds for C/C++ projects. So, the semantics of `make test` assumes that `test` directory should be generated as a result.
+The original purpose of Make is to automate complex builds for C/C++ projects. So, the semantics of `make test` assumes that `test` directory should be generated as a result.
 
-If such directory exists, Make assumes there's no need to execute anything. This is exactly what happened, since every Rails project has `test` directory.
+If such a directory exists, Make assumes there's no need to execute anything. This is exactly what happened since every Rails project has a `test` directory.
 
 To persuade Make, Bob has to add one magical rule to `Makefile`:
 
@@ -116,7 +116,7 @@ Makefile:13: *** missing separator. Stop.
 If your editor detects the file format correctly, you don't have to do anything. If not, then just configure it accordingly.
 
 
-Now Bob is now warned, he knows how to avoid common problems, so we can move on.
+Now Bob is warned, he knows how to avoid common problems, so we can move on.
 
 <div style="page-break-after: always;"></div>
 ## 3. Running multiple commands at once
@@ -130,7 +130,7 @@ Yup, you can combine commands in long chains. If one fails, the rest of them goi
 
 ## 4. Subcommands
 
-At some point, Bob's team decides that tests execution should be a part of deployment process, so they just hardcoded `test` command into deploy instructions:
+At some point, Bob's team decides that tests execution should be a part of the deployment process, so they just hardcoded `test` command into deploy instructions:
 
 ```make
 deploy: test
@@ -141,7 +141,7 @@ This means that each time you run `make deploy`, `make test` is called first. An
 <div style="page-break-after: always;"></div>
 ## 5. Aliases
 
-Alice adds a new command to run migrations, but Bob keeps forgetting how it is called. He run `make dbmigrate`, `make db_migrate`, and even `make db:migrate`, but kept getting error: 
+Alice adds a new command to run migrations, but Bob keeps forgetting how it is called. He runs `make dbmigrate`, `make db_migrate`, and even `make db:migrate`, but keeps getting the error: 
 
 ```
 make: *** No rule to make target '*'.  Stop.
@@ -157,7 +157,7 @@ db_migrate: db-migrate
 dbmigrate: db-migrate
 ```
 
-Sometimes it is hard to come up with handy name for a shortcut. In this case just create a bunch of aliases and keep the most used one after a while.
+Sometimes it is hard to come up with a handy name for a shortcut. In this case, just create a bunch of aliases and keep the most used one after a while.
 
 <div style="page-break-after: always;"></div>
 ## 6. Multiline commands
@@ -165,7 +165,7 @@ Sometimes it is hard to come up with handy name for a shortcut. In this case jus
 After a while, the team decided to replace `make db-migrate` with just `make db`, which is impossible to forget.
 Of course, they added `db` to `.PHONY:`, because Rails projects have `db` directory as well.
 
-So far so good, but on the next day the team decides that they not going to commit `db/schema.rb` anymore, but delegate it to CI system. The problem is that Rails generates the new version of `schema.rb` every time you run migrations.
+So far so good, but on the next day, the team decides that they not going to commit `db/schema.rb` anymore, but delegate it to the CI system. The problem is that Rails generates the new version of `schema.rb` every time you run migrations.
 
 Not a big problem actually:
 
@@ -186,7 +186,7 @@ schema-reset:
 	git checkout HEAD -- db/schema.rb
 ```
 
-Make prints each command before executing it, so the aoutput is a bit verbose:
+Make prints each command before executing it, so the output is a bit verbose:
 
 ```
 $: make db
@@ -253,7 +253,7 @@ staging-deploy: 
 	ansible-playbook -i inventory/staging --tags ‘deploy’ #...
 ```
 
-It's even not a feature of Make - it's a regular shell scripting. It will condemn Bob for broken tests every time they fail, but will deploy the project anyway.
+It's even not a feature of Make - it's a regular shell scripting. It will condemn Bob for broken tests every time they fail but will deploy the project anyway.
 
 If we don’t want lower Bob's self-esteem, we can do it like this:
 
@@ -275,7 +275,7 @@ staging-fetch-dump:
 
 A good start, but how about to make it more useful, so we could use it to download any file?
 
-We can pass a filename as argument:
+We can pass a the filename as an argument:
 
 ```make
 staging-fetch:
@@ -290,7 +290,7 @@ And we call it like this:
 <div style="page-break-after: always;"></div>
 ## 11. Seamless arguments
 
-What if we could simplify the command by skipping the name of the argument, since we have only one here?
+What if we could simplify the command by skipping the name of the argument since we have only one here?
 
 Could we just do `make staging-fetch db/dump.tgz`?
 
@@ -309,13 +309,13 @@ staging-fetch:
 	scp app@staging-server.dev:/path/to/app/$(ARGS)/ ./
 ```
 
-We called it "balck magic" for a reason. This trick has one annoying side effect. After the script is executed, you get an error message like this:
+We called it "black magic" for a reason. This trick has one annoying side effect. After the script is executed, you get an error message like this:
 
 ```
 make: *** No rule to make target ‘db/dump.tgz’. Stop.
 ```
 
-Here is a [post on StackOverflow](https://stackoverflow.com/a/6273809/1334666) that explains how it works and even contains a fix for this problem. Although, Bob couldn‘t make it work, but he decided that this is the price he is ready to pay.
+Here is a [post on StackOverflow](https://stackoverflow.com/a/6273809/1334666) that explains how it works and even contains a fix for this problem. Although, Bob couldn‘t make it work but he decided that this is the price he is ready to pay.
 
 
 <div style="page-break-after: always;"></div>
