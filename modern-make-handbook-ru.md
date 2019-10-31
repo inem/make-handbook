@@ -1,4 +1,4 @@
-# Modern Make Handbook (v. 0.5-ru)
+# Modern Make Handbook (v. 0.6-ru)
 
 [![](https://i.imgur.com/a1MOR8T.png)](https://makefile.site)
 
@@ -338,5 +338,5 @@ staging-fetch:
 
 
 
-[![](https://i.imgur.com/MhU79hR.png)](https://makefile.site#yay)
+[![](https://i.imgur.com/MhU79hR.png)](https://makefile.site)
 

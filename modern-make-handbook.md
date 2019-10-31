@@ -1,6 +1,6 @@
-# Modern Make Handbook (v. 0.5-en)
+# Modern Make Handbook (v. 0.6)
 
-[![](https://i.imgur.com/a1MOR8T.png)](https://makefile.site)
+[![](https://i.imgur.com/dYVUnUu.png)](https://makefile.site)
 
 
 
@@ -26,6 +26,7 @@
 – And what does Bob say when he’s deploying project?
 
 – `ansible-playbook -i inventory/production --tags “deploy” app-server.yml -vvv --become-user=app --extra-vars=extra.txt --vault-password-file="~/.ansible/vault.txt"`
+
 
 
 This is what we’re going to fix.
@@ -333,6 +334,8 @@ staging-fetch:
   scp app@$(S):/path/to/app/$(F)/ ./
 ```
 
+
+
 ... [TO BE CONTINUED IN PRO VERSION](https://gum.co/makefile-ru): ...
 
 1. [Advanced scripting](https://gum.co/makefile-ru)
@@ -351,5 +354,5 @@ staging-fetch:
 
 
 
-[![](https://i.imgur.com/MhU79hR.png)](https://makefile.site#yay)
+[![](https://i.imgur.com/X1sXATm.png)](https://makefile.site)
 
