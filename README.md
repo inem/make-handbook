@@ -7,3 +7,4 @@
 
 1. If you found a typo or mistake in some code, please create an issue or pull request.
 2. Feel free to create issue if you think that something must be added to the handbook.
+3. If you want to suggest a translation, create a pull request with `modern-make-handbook-your_language.md` file
