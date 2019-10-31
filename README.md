@@ -9,6 +9,6 @@
 2. Feel free to create issue if you think that something must be added to the handbook.
 3. If you want to suggest a translation, create a pull request with `modern-make-handbook-your_language.md` file
 
-## Special thanks 🎉
+## Special thanks to: 🎉
 
-1. To [Andrew Slotin](https://github.com/andrewslotin) - for the first version of English translation
+1. [Andrew Slotin](https://github.com/andrewslotin) - for the first version of English translation
