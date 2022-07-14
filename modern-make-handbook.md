@@ -41,7 +41,7 @@ deploy:
 ```
 
 
-Next time Bob will have to say just `make deploy.
+Next time Bob will have to say just `make deploy`.
 
 Cool, huh?  It means that
 
