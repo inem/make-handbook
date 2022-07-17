@@ -41,9 +41,9 @@ deploy:
 ```
 
 
-Next time Bob will have to say just `make deploy.
+Next time Bob will have to say just `make deploy`.
 
-Cool, huh?  It means that
+Cool, huh?  It means that:
 
 - Bob saves time because he doesn't have to remember all the details of the deploy command
 - Bob will never make a mistake in the deploy command
